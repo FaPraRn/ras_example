@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- General:Name => name, General:Identifier => id -->
+<defaultprofile:Asset accessRights="" date="" id="" name="EmotionAppraisalModuleAsset" shortDescription="This asset serves as example for LiDaMi co-op programme." state="" version="" xmlns:defaultprofile="http:///defaultprofile.ecore" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http:///defaultprofile.ecore ras/DefaultprofileXML.xsd ">
+  <classification>
+    <descriptorGroup artifact="" classificationSchema="" name="RAGE Asset Description Structure" nodeDescriptor="">
+    	
+    	<freeFormDescriptor name="Contributor">
+    		<description value="INESC-ID" />
+    	</freeFormDescriptor>
+    	<freeFormDescriptor name="Description">
+    		<description value="
+    		This module allows for events to be received and, depending on the event received, determine the emotional state of a virtual character, according to emotion theory. 
+
+&lt;h1&gt;Emotional Thresholds and decay rates: &lt;/h1&gt;
+With this component it is possible to manage the thresholds and decay rates of emotions over the course of the simulation. These define the character's resistance to each of OCC's emotions and how fast do they decay over time. Fortunately, these are already defined and you do not have to change them. You'll only need to understand that a high threshold, for instance 5 for anger will cut emotions of type Anger that do not have at least a potential intensity of 5. Even if the emotion has a potential greater than 5, it will be experienced but with a lesser intensity.
+
+As example, if an emotion of anger is generated with potential 7 (potentially strong) it will create an emotion with intensity 2 (low/mild anger). So, do not be surprised if sometimes a character does not feel an expected emotion that should be triggered by an emotional reaction rules. This may be due to the emotion being cut off by the threshold. Remember that emotions are additionally influenced by mood, so for characters in bad mood it will be harder to experience positive emotions (because the potential will be lower, and the emotion is more likely to be cut off). An analogous effect occurs with characters in good mood.
+
+&lt;h1&gt;Emotion Generation:&lt;/h1&gt;
+With Emotion Appraisal it is possible to generate emotions using two mechanisms:
+&lt;ul&gt;
+  &lt;li&gt; Emotions based on domain specific rules by associating the values of appraisal variables such as desirability or praiseworthiness to events/actions that may exist in the scenario.&lt;/li&gt;
+  &lt;li&gt; Emotions based on sets of variables, generated internally (by the module) or externally, that represent internal states which the character wishes to attain/maintain, for example: energy. &lt;/li&gt;
+&lt;/ul&gt;
+Other than the two mechanisms for emotion generation previously described, this module allows for the integration of other mechanisms for the management of appraisal variables.
+The module allows for the configuration of certain aspects of the mechanism of emotion generation. For example, it is possible to specify the average time a medium intensity emotion takes to reach 0 or the easiness/difficulty a certain character has in feeling a given emotion.
+    		" /></freeFormDescriptor>
+    	<freeFormDescriptor name="Input/Output">
+    		<description value="
+    		The are two main types of input needed for the agent, one referring the initial configuration of the agent, and another related to a set of perceptions that the agent must receive from the environment where he is connected to. 
+
+&lt;h1&gt;Initial Configuration:&lt;/h1&gt;
+At the moment this is done though a set of xml configuration files, but we can revise this mechanism and eventually even use an alternative configuration file (JSON), or even a configuration class required for the initialization function. 
+Configuration parameters:
+
+&lt;ul&gt;
+  &lt;li&gt; Emotional thresholds and decay rates for each OCC emotion type, which specify how easily the character experiences the emotion type and how fast does it disappear. Example:    &lt;/br&gt;
+
+&amp;lt;EmotionalThresholds&amp;gt;   &lt;/br&gt;
+&amp;lt;EmotionalThreshold emotion='Love' threshold='3' decay='5' /&amp;gt;    &lt;/br&gt;
+... &lt;/br&gt;
+&amp;lt;/EmotionalThresholds&amp;gt;    &lt;/br&gt;
+&lt;/li&gt; 
+&lt;li&gt; Emotional reaction rules – hand-coded domain specific rules that specify appraisal variables for event types. Example: 
+
+&amp;lt;EmotionalReaction desirability='5' praiseworthiness='5'&amp;gt;
+&amp;lt;Event action='SpeechAct' subject='[SELF]'' parameters='insult'/&amp;gt;
+&amp;lt;/EmotionalReaction&amp;gt;
+&lt;/li&gt; 
+
+&lt;li&gt; Motivational parameters – a motivational parameter corresponds to a variable that represents the agent's motivation to act and to react emotionally to change in its value. &lt;/li&gt; 
+&lt;/ul&gt;
+
+   &lt;img src=&quot;img/FatimaCoreArchitecture.png&quot; alt=&quot;Fatima Core Architecture&quot; &gt;   &lt;/br&gt;
+FAtiMA Core Architecture  
+&lt;h1&gt; Perceptions: &lt;/h1&gt;
+The virtual character is able to receive perceptions from the environment (events) which are used to update the agent's memory (or internal state) and to trigger the appraisal process.
+These perceptions consist of messages the character receives from the module indicating events such as (but not limited to): 
+&lt;ul&gt;
+&lt;li&gt; shutting down by making the character acknowledge its shutdown and ending further perceptions; &lt;/li&gt;
+&lt;li&gt; system commands like starting, stopping, resetting, saving or assessing an entity's properties; &lt;/li&gt;
+&lt;li&gt; acknowledging, keeping track and committing to memory the existence of other entities in the environment; &lt;/li&gt;
+&lt;li&gt; noticing or focusing on the properties of another entity on the environment/scene; &lt;/li&gt;
+&lt;li&gt; acknowledging the appearance of a new entity on the current environment; &lt;/li&gt;
+&lt;li&gt; noticing a given entity is no longer present on the current environment; &lt;/li&gt;
+&lt;li&gt; acknowledging the change/disappearance of the properties of entities the character is interacting with &lt;/li&gt;
+&lt;li&gt;	the stopping, resuming or advancing of &quot;agent time&quot; which enables for the instant &quot;aging&quot; of characters, keeping track of how the emotions fare in the elapsed time. For example, this can be used to simulate the passage of years from scene to scene; &lt;/li&gt;
+&lt;li&gt;	knowing who the character is interacting with; &lt;/li&gt;
+&lt;/ul&gt;
+Other perceptions may be included through external sources.
+
+This module outputs an emotional state with the information regarding the emotions that are active, their intensity and the characters mood.
+    		" /></freeFormDescriptor>
+    	<freeFormDescriptor name="Example of use in games">
+    		<description value="
+    		&lt;p&gt;
+  This module (and other modules included in the FAtiMA Emotional Agent architecture) were used in several serious game scenarios such as FearNot!, Orient, Traveller (implemented in Unity3D). It was integrated with other game-like scenarios with robotic agents in Unity3D using Thalamus. In one example demonstrator, a MinMax algorithm was used to take decisions about a two player game, and to determine appraisals based on the predicted wining probability, which was used to trigger FAtiMA's appraisal and emotional generation process. It was also integrated in a demonstrator prototype with Neverwinter Nights 2, using ION and NWNX4. 
+  &lt;/p&gt;
+    		" /></freeFormDescriptor>
+    	<freeFormDescriptor name="Value">
+    		<description value="
+    		&lt;p&gt;
+     This module is useful for the creation of virtual characters by increasing their emotional believability. It provides an implementation of appraisal mechanisms based on theory of human emotions, which will make the character feel more human-like. The output of this module can be easily plugged into other modules that use emotional states. In particular, decision making models and gesture and facial animation. The mechanisms implemented can be applied to many different situations with simple configuration procedure that consists of simple mappings of events of the game to appraisal variables of the character.
+  &lt;/p&gt;
+  &lt;p&gt;
+     Emotionally believable characters are important to create believable social environments in applied games, especially to take roles with close interaction with the player, for example, as a tutor or companion.
+  &lt;/p&gt;
+    		" /></freeFormDescriptor></descriptorGroup>
+    <descriptorGroup name="RAGE Metadata Model_V1">
+    	<freeFormDescriptor name="Acronym">
+	  <description value="" /></freeFormDescriptor>
+    	<freeFormDescriptor name="Keywords">
+    		 <description value="" /></freeFormDescriptor>
+    	<freeFormDescriptor name="Version">
+    		 <description value="" /></freeFormDescriptor>
+    	<freeFormDescriptor name="Language">
+    		 <description value="" />
+    	</freeFormDescriptor>
+    	<freeFormDescriptor name="Maturity level">
+    		 <description value="" /></freeFormDescriptor></descriptorGroup>
+    <context name="RAGE">
+    	<description value='Co-op programme "Linked Data in der Medienindustrie" SS2015' ></description></context>
+  </classification>
+  <solution>
+    <artifact accessRights="GNU General Public License version 3.0" digestName="" digestValue="" name="EmotionAppraisalModule.zip" type="GitHub Snapshot" version="0.1">
+    	<reference value="https://github.com/playgenhub/DataPlay">
+	  <referenceKind name="GitHub URL" />
+    	</reference></artifact><artifact
+    	type="Folder" name="img">
+	<artifact name="Fatima Core Architecture.png" type="image/png"></artifact>
+</artifact>
+  	<artifact name="screenshots" type="Folder">
+  		<artifact
+  			name="687474703a2f2f692e696d6775722e636f6d2f4c5035633543332e706e67.png"
+  			type="image/png">
+  		</artifact>
+  		<artifact
+  			name="687474703a2f2f692e696d6775722e636f6d2f6c4d63644d594c2e706e67.png"
+  			type="image/png">
+  		</artifact>
+  		<artifact
+  			name="687474703a2f2f692e696d6775722e636f6d2f6c3752775474512e706e67.png"
+  			type="image/png">
+  		</artifact>
+  		<artifact
+  			name="687474703a2f2f692e696d6775722e636f6d2f5531676d36366a2e706e67.png"
+  			type="image/png">
+  		</artifact>
+  		<artifact
+  			name="687474703a2f2f692e696d6775722e636f6d2f383154396e316b2e706e67.png"
+  			type="image/png">
+  		</artifact>
+  		<artifact
+  			name="687474703a2f2f692e696d6775722e636f6d2f526249395962582e706e67.png"
+  			type="image/png">
+  		</artifact></artifact>
+  </solution>
+  <usage artifact="">
+    <contextRef context=""/>
+    <artifactActivity artifact="" context=""/>
+    <assetActivity/>
+  </usage>
+  <relatedAsset artifact="" assetId="" assetVersion="" name="" relationshipType="">
+    <description value=""/>
+  </relatedAsset>
+  <profile artifact="" classificationSchema="" dependencyKind="" element="" idHistory="" name="Default Profile" requiredAttribute="" requiredElement="" semanticConstraint="" versionMajor="0" versionMinor="0">
+    <description value=""/>
+    <relatedProfile artifact="" id="" name="" parentId="" versionMajor="0" versionMinor="0"/>
+    <history value=""/>
+  </profile>
+  <description value="This asset supports an emotional layer for virtual characters in applied games. It offers a generic emotion appraisal mechanism based on a two-step process."/>
+</defaultprofile:Asset>
